@@ -12,9 +12,16 @@ docker compose up
 
 ### 2. Запуск парсера и отправка результата в Elasticsearch
 
+
 ```
 docker run --rm --name logstash --net elk_elastic -v $(pwd)/logstash:/app -it logstash:7.17.23 logstash -f /app/clickstream.conf
 ```
+
+Данная команда:
+  - зупускает контейнер с именем «logstash»;
+  - использует подсеть поднятых ранее сервисов «elk_elastic»;
+  - монтирует локадьную директорию logstash с конфигом «clickstream.conf» и логом «weblog.csv»;
+  - запускает инструмент logstash для чтения и разбора лога (см. комментарии в «clickstream.conf»).
 
 ### 3. Результат парсинга
 
