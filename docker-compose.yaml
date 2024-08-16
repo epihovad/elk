@@ -1,0 +1,52 @@
+services:
+  elasticsearch:
+    image: elasticsearch:7.17.13
+    container_name: elasticsearch
+    environment:
+#      - node.name=es01
+#      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    volumes:
+#      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+#      - 9300:9300
+    networks:
+      - elastic
+
+#  logstash:
+#    image: logstash:7.17.23
+#    container_name: logstash
+#    volumes:
+#      - logstash:/usr/share/logstash/app
+#    ports:
+#      - 5044:5044
+#    networks:
+#      - elastic
+#    depends_on:
+#      - elasticsearch
+
+  kibana:
+    image: bitnami/kibana:7.17.21
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://51.250.36.250:9200
+      - ELASTICSEARCH_HOSTS=http://51.250.36.250:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+#volumes:
+#  esdata:
+#  logstash:
+
+networks:
+  elastic:
+    driver: bridge
